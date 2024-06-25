@@ -1,5 +1,5 @@
 import { ServiceAccount, firestore } from "firebase-admin";
-import { App, cert, initializeApp } from "firebase-admin/app";
+import { App, cert, initializeApp } from "firebase-admin/apps";
 
 import serviceAccount from "@/configs/board-crawler-firebase-adminsdk.json";
 
