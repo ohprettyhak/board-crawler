@@ -1,0 +1,18 @@
+{
+  "name": "board-crawler-functions",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "functions",
+    "bot"
+  ],
+  "scripts": {
+    "lint": "eslint '**/*.ts'",
+    "postinstall": "husky install"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6"
+  }
+}

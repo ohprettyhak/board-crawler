@@ -1,0 +1,4 @@
+{
+  "extends": "./base",
+  "exclude": ["node_modules", "lib"]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint '**/*.ts'",
+    "build": "tsc && tsc-alias",
+    "build:watch": "tsc --watch & tsc-alias",
+    "dev": "pnpm run build:watch && node lib/app.js",
+    "prebuild": "rm -rf lib"
+  },
+  "keywords": [],
+  "author": "ohprettyhak",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^11.11.1",
+    "node-telegram-bot-api": "^0.66.0"
+  },
+  "devDependencies": {
+    "@board-crawler/eslint-config": "workspace:*",
+    "@board-crawler/typescript-config": "workspace:*",
+    "@types/node": "^20.14.8",
+    "@types/node-telegram-bot-api": "^0.64.7",
+    "prettier": "^3.3.2",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^4.9.5"
+  }
+}
