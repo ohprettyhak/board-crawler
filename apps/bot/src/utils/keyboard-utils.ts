@@ -1,14 +1,14 @@
 import TelegramBot from "node-telegram-bot-api";
-import { CALLBACK_DATA, CALLBACK_TEXT_MAP } from "@/constants/keyboards";
+import { organizationBoards } from "@/constants/keyboards";
 
 const createInlineKeyboard = (
   buttonKeys: string[],
 ): TelegramBot.SendMessageOptions => ({
   reply_markup: {
-    inline_keyboard: buttonKeys.map(callbackData => [
+    inline_keyboard: buttonKeys.map(key => [
       {
-        text: CALLBACK_TEXT_MAP[callbackData] || callbackData,
-        callback_data: callbackData,
+        text: organizationBoards[key].text,
+        callback_data: organizationBoards[key].callback_data,
       },
     ]),
   },
@@ -16,15 +16,15 @@ const createInlineKeyboard = (
 
 export const createOrganizationKeyboard =
   (): TelegramBot.SendMessageOptions => {
-    const buttonKeys = [CALLBACK_DATA.HUFS];
+    const buttonKeys = [organizationBoards.hufs.callback_data];
     return createInlineKeyboard(buttonKeys);
   };
 
 export const createHUFSBoardKeyboard = (): TelegramBot.SendMessageOptions => {
-  const buttonKeys = [
-    CALLBACK_DATA.AI_SCHOOL,
-    CALLBACK_DATA.COMPUTER_SCIENCE,
-    CALLBACK_DATA.BACK_TO_ORGANIZATION,
+  const buttonKeys: string[] = [
+    organizationBoards.hufs_soft.callback_data,
+    organizationBoards.hufs_computer.callback_data,
+    organizationBoards.back_to_organization.callback_data,
   ];
   return createInlineKeyboard(buttonKeys);
 };

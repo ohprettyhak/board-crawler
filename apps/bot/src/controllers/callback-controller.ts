@@ -1,46 +1,84 @@
 import TelegramBot from "node-telegram-bot-api";
-import { handleBoardSelection } from "@/services/subscription-service";
 import {
   createHUFSBoardKeyboard,
   createOrganizationKeyboard,
 } from "@/utils/keyboard-utils";
 import { PROMPT } from "@/constants/messages";
+import { EditMessageFunction } from "@/services/telegram-service";
+import { organizationBoards } from "@/constants/keyboards";
+import SubscriberService from "@/services/subscriber-service";
 
-export async function callbackQuery(
-  bot: TelegramBot,
-  query: TelegramBot.CallbackQuery,
-): Promise<void> {
-  const chatId: string | undefined = query.message?.chat.id.toString();
-  const messageId: number | undefined = query.message?.message_id;
-  const action: string | undefined = query.data;
+class CallbackController {
+  private readonly editMessage: EditMessageFunction;
+  private readonly subscriberService: SubscriberService;
+  private readonly organizationKeyboards: Record<
+    string,
+    () => TelegramBot.SendMessageOptions
+  >;
 
-  if (!chatId || !action || !messageId) return;
+  constructor(bot: TelegramBot, editMessage: EditMessageFunction) {
+    this.editMessage = editMessage;
+    this.subscriberService = new SubscriberService(bot);
+    this.organizationKeyboards = {
+      hufs: createHUFSBoardKeyboard,
+    };
+  }
 
-  switch (action) {
-    case "hufs":
-      await bot.editMessageText(PROMPT.SUBSCRIBE, {
-        chat_id: chatId,
-        message_id: messageId,
-        reply_markup: createHUFSBoardKeyboard()
-          .reply_markup as TelegramBot.InlineKeyboardMarkup,
-      });
-      break;
+  public async handleCallbackQuery(
+    query: TelegramBot.CallbackQuery,
+  ): Promise<void> {
+    const chatId = query.message?.chat.id.toString();
+    const messageId = query.message?.message_id;
+    const action = query.data;
 
-    case "soft":
-    case "computer":
-      await handleBoardSelection(bot, chatId, action);
-      break;
+    if (!chatId || !action || !messageId) return;
 
-    case "back_to_organization":
-      await bot.editMessageText(PROMPT.BOARD_SELECTION, {
-        chat_id: chatId,
-        message_id: messageId,
-        reply_markup: createOrganizationKeyboard()
-          .reply_markup as TelegramBot.InlineKeyboardMarkup,
-      });
-      break;
+    if (this.organizationKeyboards[action]) {
+      await this.handleOrganization(chatId, messageId, action);
+    } else {
+      await this.handleDefaultAction(chatId, messageId, action);
+    }
+  }
 
-    default:
-      break;
+  private async handleOrganization(
+    chatId: string,
+    messageId: number,
+    organization: string,
+  ) {
+    const text =
+      `${organizationBoards[organization].text}를 선택했어요!\n\n` +
+      PROMPT.BOARD_SELECTION;
+    const replyMarkup = this.organizationKeyboards[organization]()
+      .reply_markup as TelegramBot.InlineKeyboardMarkup;
+
+    await this.editMessage(chatId, messageId, text, replyMarkup);
+  }
+
+  private async handleDefaultAction(
+    chatId: string,
+    messageId: number,
+    action: string,
+  ) {
+    switch (action) {
+      case organizationBoards.hufs_soft.callback_data:
+      case organizationBoards.hufs_computer.callback_data:
+        await this.subscriberService.selectBoard(chatId, action);
+        break;
+
+      case organizationBoards.back_to_organization.callback_data:
+        await this.editMessage(
+          chatId,
+          messageId,
+          PROMPT.SUBSCRIBE,
+          createOrganizationKeyboard()
+            .reply_markup as TelegramBot.InlineKeyboardMarkup,
+        );
+        break;
+
+      default:
+        break;
+    }
   }
 }
+
+export default CallbackController;

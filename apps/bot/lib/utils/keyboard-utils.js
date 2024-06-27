@@ -4,24 +4,24 @@ exports.createHUFSBoardKeyboard = exports.createOrganizationKeyboard = void 0;
 const keyboards_1 = require("../constants/keyboards");
 const createInlineKeyboard = (buttonKeys) => ({
     reply_markup: {
-        inline_keyboard: buttonKeys.map(callbackData => [
+        inline_keyboard: buttonKeys.map(key => [
             {
-                text: keyboards_1.CALLBACK_TEXT_MAP[callbackData] || callbackData,
-                callback_data: callbackData,
+                text: keyboards_1.organizationBoards[key].text,
+                callback_data: keyboards_1.organizationBoards[key].callback_data,
             },
         ]),
     },
 });
 const createOrganizationKeyboard = () => {
-    const buttonKeys = [keyboards_1.CALLBACK_DATA.HUFS];
+    const buttonKeys = [keyboards_1.organizationBoards.hufs.callback_data];
     return createInlineKeyboard(buttonKeys);
 };
 exports.createOrganizationKeyboard = createOrganizationKeyboard;
 const createHUFSBoardKeyboard = () => {
     const buttonKeys = [
-        keyboards_1.CALLBACK_DATA.AI_SCHOOL,
-        keyboards_1.CALLBACK_DATA.COMPUTER_SCIENCE,
-        keyboards_1.CALLBACK_DATA.BACK_TO_ORGANIZATION,
+        keyboards_1.organizationBoards.hufs_soft.callback_data,
+        keyboards_1.organizationBoards.hufs_computer.callback_data,
+        keyboards_1.organizationBoards.back_to_organization.callback_data,
     ];
     return createInlineKeyboard(buttonKeys);
 };

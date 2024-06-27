@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeSubscriber = exports.updateSubscriber = exports.getSubscriber = void 0;
+exports.deleteBoardById = exports.save = exports.findById = void 0;
 const firebase_client_1 = require("../libs/firebase-client");
 const collection = firebase_client_1.firestore.collection("subscribers");
-async function getSubscriber(chatId) {
+async function findById(chatId) {
     const doc = await collection.doc(chatId).get();
     if (doc.exists) {
         return doc.data();
@@ -12,18 +12,17 @@ async function getSubscriber(chatId) {
         return null;
     }
 }
-exports.getSubscriber = getSubscriber;
-async function updateSubscriber(chatId, subscribedBoards) {
-    const subscriber = { chatId, subscribedBoards };
-    await collection.doc(chatId).set(subscriber, { merge: true });
+exports.findById = findById;
+async function save(subscriber) {
+    await collection.doc(subscriber.chatId).set(subscriber, { merge: true });
 }
-exports.updateSubscriber = updateSubscriber;
-async function removeSubscriber(chatId, board) {
-    const subscriber = await getSubscriber(chatId);
+exports.save = save;
+async function deleteBoardById(chatId, board) {
+    const subscriber = await findById(chatId);
     if (subscriber) {
         subscriber.subscribedBoards = subscriber.subscribedBoards.filter(b => b !== board);
-        await updateSubscriber(chatId, subscriber.subscribedBoards);
+        await save(subscriber);
     }
 }
-exports.removeSubscriber = removeSubscriber;
+exports.deleteBoardById = deleteBoardById;
 //# sourceMappingURL=subscriber-utils.js.map

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.firestore = exports.firebaseApp = void 0;
 const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
-const firebase_adminsdk_json_1 = __importDefault(require("../configs/firebase-adminsdk.json")); // 실제 경로로 변경
+const firebase_adminsdk_json_1 = __importDefault(require("../configs/firebase-adminsdk.json"));
 const firebaseApp = (0, app_1.initializeApp)({
     credential: (0, app_1.cert)(firebase_adminsdk_json_1.default),
 });

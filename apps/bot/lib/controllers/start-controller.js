@@ -1,10 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startCommand = void 0;
 const messages_1 = require("../constants/messages");
-async function startCommand(bot, msg) {
-    const chatId = msg.chat.id;
-    await bot.sendMessage(chatId, messages_1.PROMPT.START);
+class StartController {
+    constructor(bot) {
+        this.bot = bot;
+    }
+    async handleStartCommand(msg) {
+        const chatId = msg.chat.id;
+        await this.bot.sendMessage(chatId, messages_1.PROMPT.START);
+    }
 }
-exports.startCommand = startCommand;
+exports.default = StartController;
 //# sourceMappingURL=start-controller.js.map

@@ -4,26 +4,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_telegram_bot_api_1 = __importDefault(require("node-telegram-bot-api"));
-const start_controller_1 = require("../controllers/start-controller");
-const callback_controller_1 = require("../controllers/callback-controller");
-const subscribe_controller_1 = require("../controllers/subscribe-controller");
+const start_controller_1 = __importDefault(require("../controllers/start-controller"));
+const subscribe_controller_1 = __importDefault(require("../controllers/subscribe-controller"));
+const current_controller_1 = __importDefault(require("../controllers/current-controller"));
+const unsubscribe_controller_1 = __importDefault(require("../controllers/unsubscribe-controller"));
+const callback_controller_1 = __importDefault(require("../controllers/callback-controller"));
 class TelegramService {
     constructor(token) {
+        this.editMessage = async (chatId, messageId, text, replyMarkup) => {
+            await this.bot.editMessageText(text, {
+                chat_id: chatId,
+                message_id: messageId,
+                reply_markup: replyMarkup,
+            });
+        };
         this.bot = new node_telegram_bot_api_1.default(token, { polling: true });
+        this.startController = new start_controller_1.default(this.bot);
+        this.subscribeController = new subscribe_controller_1.default(this.bot);
+        this.currentController = new current_controller_1.default(this.bot);
+        this.unsubscribeController = new unsubscribe_controller_1.default(this.bot);
+        this.callbackController = new callback_controller_1.default(this.bot, this.editMessage);
     }
     start() {
-        this.bot.onText(/\/start/, this.startCommand.bind(this));
-        this.bot.onText(/\/subscribe/, this.subscribeCommand.bind(this));
-        this.bot.on("callback_query", this.callbackQuery.bind(this));
-    }
-    startCommand(msg) {
-        (0, start_controller_1.startCommand)(this.bot, msg).catch(err => console.error(err));
-    }
-    subscribeCommand(msg) {
-        (0, subscribe_controller_1.subscribeCommand)(this.bot, msg).catch(err => console.error(err));
-    }
-    async callbackQuery(query) {
-        await (0, callback_controller_1.callbackQuery)(this.bot, query);
+        const commands = {
+            "/start": this.startController.handleStartCommand.bind(this.startController),
+            "/subscribe": this.subscribeController.handleSubscribeCommand.bind(this.subscribeController),
+            "/unsubscribe": this.unsubscribeController.handleUnsubscribeCommand.bind(this.unsubscribeController),
+            "/current": this.currentController.handleCurrentCommand.bind(this.currentController),
+        };
+        for (const [command, handler] of Object.entries(commands)) {
+            this.bot.onText(new RegExp(command), msg => {
+                handler(msg).catch(err => console.error(err));
+            });
+        }
+        this.bot.on("callback_query", query => {
+            this.callbackController
+                .handleCallbackQuery(query)
+                .catch(err => console.error(err));
+        });
     }
 }
 exports.default = TelegramService;
