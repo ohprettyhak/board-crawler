@@ -319,4 +319,7 @@ $RECYCLE.BIN/
 # Secret Object file
 src/configs/*.json
 
+lib
+lib/**
+
 # End of https://www.toptal.com/developers/gitignore/api/firebase,webstorm+all,macos,windows,visualstudiocode,node
