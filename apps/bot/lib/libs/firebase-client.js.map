@@ -1,0 +1,1 @@
+{"version":3,"file":"firebase-client.js","sourceRoot":"","sources":["../../src/libs/firebase-client.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAyE;AACzE,wDAAmE;AACnE,8FAA8D,CAAC,YAAY;AAE3E,MAAM,WAAW,GAAG,IAAA,mBAAa,EAAC;IAChC,UAAU,EAAE,IAAA,UAAI,EAAC,gCAAgC,CAAC;CACnD,CAAC,CAAC;AAIM,kCAAW;AAFpB,MAAM,WAAW,GAAc,IAAA,wBAAY,EAAC,WAAW,CAAC,CAAC;AAEpB,gCAAS"}
