@@ -4,6 +4,7 @@ import { EditMessageFunction } from "@/services/telegram-service";
 import {
   createHUFSBoardKeyboard,
   createOrganizationKeyboard,
+  createRemoveSubscriptionKeyboard,
 } from "@/utils/keyboard-utils";
 import { organizationBoards } from "@/constants/keyboards";
 import { PROMPT } from "@/constants/messages";
@@ -81,6 +82,24 @@ class CallbackController {
         break;
 
       default:
+        if (action.startsWith("unsubscribe_")) {
+          const board: string = action.replace("unsubscribe_", "");
+          const response: string =
+            await this.subscriberService.removeSubscription(chatId, board);
+          await this.bot.sendMessage(chatId, response);
+
+          const keyboard = await createRemoveSubscriptionKeyboard(chatId);
+          if (keyboard) {
+            await this.editMessage(
+              chatId,
+              messageId,
+              PROMPT.BOARD_UNSUBSCRIBE_SELECTION,
+              keyboard.reply_markup as TelegramBot.InlineKeyboardMarkup,
+            );
+          } else {
+            await this.editMessage(chatId, messageId, PROMPT.NO_SUBSCRIPTIONS);
+          }
+        }
         break;
     }
   }

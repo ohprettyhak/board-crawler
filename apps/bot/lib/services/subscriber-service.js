@@ -23,16 +23,15 @@ class SubscriberService {
             return messages_1.PROMPT.SUBSCRIPTION_ADDED.replace("{board}", boardDisplayName);
         }
     }
-    async removeSubscriptions(chatId) {
+    async removeSubscription(chatId, board) {
+        var _a;
         const subscriber = await (0, subscriber_utils_1.findById)(chatId);
         if (subscriber) {
-            subscriber.subscribedBoards = [];
+            subscriber.subscribedBoards = subscriber.subscribedBoards.filter(b => b !== board);
             await (0, subscriber_utils_1.save)(subscriber);
-            return messages_1.PROMPT.UNSUBSCRIBED;
         }
-        else {
-            return messages_1.PROMPT.NO_SUBSCRIPTIONS;
-        }
+        const boardDisplayName = ((_a = keyboards_1.organizationBoards[board]) === null || _a === void 0 ? void 0 : _a.text) || board;
+        return messages_1.PROMPT.UNSUBSCRIBED.replace("{board}", boardDisplayName);
     }
     async getCurrentSubscriptions(chatId) {
         const subscriber = await (0, subscriber_utils_1.findById)(chatId);

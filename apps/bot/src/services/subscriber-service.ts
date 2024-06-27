@@ -22,16 +22,19 @@ class SubscriberService {
     }
   }
 
-  public async removeSubscriptions(chatId: string): Promise<string> {
-    const subscriber = await findById(chatId);
-
+  public async removeSubscription(
+    chatId: string,
+    board: string,
+  ): Promise<string> {
+    const subscriber: Subscriber | null = await findById(chatId);
     if (subscriber) {
-      subscriber.subscribedBoards = [];
+      subscriber.subscribedBoards = subscriber.subscribedBoards.filter(
+        b => b !== board,
+      );
       await save(subscriber);
-      return PROMPT.UNSUBSCRIBED;
-    } else {
-      return PROMPT.NO_SUBSCRIPTIONS;
     }
+    const boardDisplayName: string = organizationBoards[board]?.text || board;
+    return PROMPT.UNSUBSCRIBED.replace("{board}", boardDisplayName);
   }
 
   public async getCurrentSubscriptions(chatId: string): Promise<string> {

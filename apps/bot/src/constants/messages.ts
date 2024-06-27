@@ -13,7 +13,8 @@ export const PROMPT = {
   CURRENT_SUBSCRIPTIONS: "현재 구독 중인 게시판 목록:\n{boards}",
   NO_SUBSCRIPTIONS: "현재 구독 중인 게시판이 없어요.",
 
-  UNSUBSCRIBED: "구독이 해지됐어요.",
+  BOARD_UNSUBSCRIBE_SELECTION: "어떤 게시판을 구독 해지하시겠어요?",
+  UNSUBSCRIBED: "{board} 게시판을 구독 해지했어요!",
 };
 
 export const COMMANDS = [

@@ -48,6 +48,18 @@ class CallbackController {
                     .reply_markup);
                 break;
             default:
+                if (action.startsWith("unsubscribe_")) {
+                    const board = action.replace("unsubscribe_", "");
+                    const response = await this.subscriberService.removeSubscription(chatId, board);
+                    await this.bot.sendMessage(chatId, response);
+                    const keyboard = await (0, keyboard_utils_1.createRemoveSubscriptionKeyboard)(chatId);
+                    if (keyboard) {
+                        await this.editMessage(chatId, messageId, messages_1.PROMPT.BOARD_UNSUBSCRIBE_SELECTION, keyboard.reply_markup);
+                    }
+                    else {
+                        await this.editMessage(chatId, messageId, messages_1.PROMPT.NO_SUBSCRIPTIONS);
+                    }
+                }
                 break;
         }
     }
