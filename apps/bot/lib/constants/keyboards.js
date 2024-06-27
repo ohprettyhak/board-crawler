@@ -13,4 +13,4 @@ exports.CALLBACK_TEXT_MAP = {
     [exports.CALLBACK_DATA.HUFS]: "한국외국어대학교 (HUFS)",
     [exports.CALLBACK_DATA.BACK_TO_ORGANIZATION]: "« 조직 선택으로 돌아가기",
 };
-//# sourceMappingURL=keyboard.js.map
+//# sourceMappingURL=keyboards.js.map

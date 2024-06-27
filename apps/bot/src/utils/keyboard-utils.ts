@@ -1,5 +1,5 @@
 import TelegramBot from "node-telegram-bot-api";
-import { CALLBACK_DATA, CALLBACK_TEXT_MAP } from "@/constants/keyboard";
+import { CALLBACK_DATA, CALLBACK_TEXT_MAP } from "@/constants/keyboards";
 
 const createInlineKeyboard = (
   buttonKeys: string[],

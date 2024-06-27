@@ -26,4 +26,4 @@ async function removeSubscriber(chatId, board) {
     }
 }
 exports.removeSubscriber = removeSubscriber;
-//# sourceMappingURL=subscriber-util.js.map
+//# sourceMappingURL=subscriber-utils.js.map

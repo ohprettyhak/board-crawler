@@ -1,8 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
-import { PROMPT } from "@/constants/Message";
-import { createOrganizationKeyboard } from "@/utils/keyboard-util";
+import { PROMPT } from "@/constants/messages";
+import { createOrganizationKeyboard } from "@/utils/keyboard-utils";
 
-export async function handleSubscribeCommand(
+export async function subscribeCommand(
   bot: TelegramBot,
   msg: TelegramBot.Message,
 ): Promise<void> {
