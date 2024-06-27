@@ -4,6 +4,7 @@ import SubscribeController from "@/controllers/subscribe-controller";
 import CurrentController from "@/controllers/current-controller";
 import UnsubscribeController from "@/controllers/unsubscribe-controller";
 import CallbackController from "@/controllers/callback-controller";
+import { COMMANDS } from "@/constants/messages";
 
 export type EditMessageFunction = (
   chatId: string,
@@ -14,7 +15,7 @@ export type EditMessageFunction = (
 
 class TelegramService {
   private readonly bot: TelegramBot;
-  
+
   private readonly startController: StartController;
   private readonly subscribeController: SubscribeController;
   private readonly currentController: CurrentController;
@@ -48,6 +49,9 @@ class TelegramService {
 
   public start(): void {
     const commands = {
+      "/help": this.startController.handleStartCommand.bind(
+        this.startController,
+      ),
       "/start": this.startController.handleStartCommand.bind(
         this.startController,
       ),
@@ -73,6 +77,8 @@ class TelegramService {
         .handleCallbackQuery(query)
         .catch(err => console.error(err));
     });
+
+    this.bot.setMyCommands(COMMANDS).catch(err => console.error(err));
   }
 }
 

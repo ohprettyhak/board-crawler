@@ -9,6 +9,7 @@ const subscribe_controller_1 = __importDefault(require("../controllers/subscribe
 const current_controller_1 = __importDefault(require("../controllers/current-controller"));
 const unsubscribe_controller_1 = __importDefault(require("../controllers/unsubscribe-controller"));
 const callback_controller_1 = __importDefault(require("../controllers/callback-controller"));
+const messages_1 = require("../constants/messages");
 class TelegramService {
     constructor(token) {
         this.editMessage = async (chatId, messageId, text, replyMarkup) => {
@@ -27,6 +28,7 @@ class TelegramService {
     }
     start() {
         const commands = {
+            "/help": this.startController.handleStartCommand.bind(this.startController),
             "/start": this.startController.handleStartCommand.bind(this.startController),
             "/subscribe": this.subscribeController.handleSubscribeCommand.bind(this.subscribeController),
             "/unsubscribe": this.unsubscribeController.handleUnsubscribeCommand.bind(this.unsubscribeController),
@@ -42,6 +44,7 @@ class TelegramService {
                 .handleCallbackQuery(query)
                 .catch(err => console.error(err));
         });
+        this.bot.setMyCommands(messages_1.COMMANDS).catch(err => console.error(err));
     }
 }
 exports.default = TelegramService;

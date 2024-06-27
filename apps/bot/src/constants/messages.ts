@@ -7,11 +7,30 @@ export const PROMPT = {
   SUBSCRIBE: "어떤 조직을 구독하시겠어요?",
 
   BOARD_SELECTION: "어떤 게시판을 구독하시겠어요?",
-  SUBSCRIPTION_ADDED: "구독이 추가됐어요.",
-  ALREADY_SUBSCRIBED: "이미 구독 중이시네요.",
+  SUBSCRIPTION_ADDED: "{board} 게시판을 구독했어요!",
+  ALREADY_SUBSCRIBED: "{board} 게시판은 이미 구독중이에요.",
 
-  CURRENT_SUBSCRIPTIONS: "현재 구독 중인 게시판 목록:\n",
+  CURRENT_SUBSCRIPTIONS: "현재 구독 중인 게시판 목록:\n{boards}",
   NO_SUBSCRIPTIONS: "현재 구독 중인 게시판이 없어요.",
 
   UNSUBSCRIBED: "구독이 해지됐어요.",
 };
+
+export const COMMANDS = [
+  {
+    command: "help",
+    description: "도움말",
+  },
+  {
+    command: "subscribe",
+    description: "새로운 구독 추가",
+  },
+  {
+    command: "unsubscribe",
+    description: "기존 구독 해지",
+  },
+  {
+    command: "current",
+    description: "현재 구독 상태 보기",
+  },
+];

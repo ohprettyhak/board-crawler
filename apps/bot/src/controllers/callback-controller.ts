@@ -1,14 +1,15 @@
 import TelegramBot from "node-telegram-bot-api";
+import SubscriberService from "@/services/subscriber-service";
+import { EditMessageFunction } from "@/services/telegram-service";
 import {
   createHUFSBoardKeyboard,
   createOrganizationKeyboard,
 } from "@/utils/keyboard-utils";
-import { PROMPT } from "@/constants/messages";
-import { EditMessageFunction } from "@/services/telegram-service";
 import { organizationBoards } from "@/constants/keyboards";
-import SubscriberService from "@/services/subscriber-service";
+import { PROMPT } from "@/constants/messages";
 
 class CallbackController {
+  private readonly bot: TelegramBot;
   private readonly editMessage: EditMessageFunction;
   private readonly subscriberService: SubscriberService;
   private readonly organizationKeyboards: Record<
@@ -17,8 +18,9 @@ class CallbackController {
   >;
 
   constructor(bot: TelegramBot, editMessage: EditMessageFunction) {
+    this.bot = bot;
     this.editMessage = editMessage;
-    this.subscriberService = new SubscriberService(bot);
+    this.subscriberService = new SubscriberService();
     this.organizationKeyboards = {
       hufs: createHUFSBoardKeyboard,
     };
@@ -62,7 +64,10 @@ class CallbackController {
     switch (action) {
       case organizationBoards.hufs_soft.callback_data:
       case organizationBoards.hufs_computer.callback_data:
-        await this.subscriberService.selectBoard(chatId, action);
+        await this.bot.sendMessage(
+          chatId,
+          await this.subscriberService.selectBoard(chatId, action),
+        );
         break;
 
       case organizationBoards.back_to_organization.callback_data:

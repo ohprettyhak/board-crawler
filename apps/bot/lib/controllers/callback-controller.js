@@ -3,14 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const keyboard_utils_1 = require("../utils/keyboard-utils");
-const messages_1 = require("../constants/messages");
-const keyboards_1 = require("../constants/keyboards");
 const subscriber_service_1 = __importDefault(require("../services/subscriber-service"));
+const keyboard_utils_1 = require("../utils/keyboard-utils");
+const keyboards_1 = require("../constants/keyboards");
+const messages_1 = require("../constants/messages");
 class CallbackController {
     constructor(bot, editMessage) {
+        this.bot = bot;
         this.editMessage = editMessage;
-        this.subscriberService = new subscriber_service_1.default(bot);
+        this.subscriberService = new subscriber_service_1.default();
         this.organizationKeyboards = {
             hufs: keyboard_utils_1.createHUFSBoardKeyboard,
         };
@@ -40,7 +41,7 @@ class CallbackController {
         switch (action) {
             case keyboards_1.organizationBoards.hufs_soft.callback_data:
             case keyboards_1.organizationBoards.hufs_computer.callback_data:
-                await this.subscriberService.selectBoard(chatId, action);
+                await this.bot.sendMessage(chatId, await this.subscriberService.selectBoard(chatId, action));
                 break;
             case keyboards_1.organizationBoards.back_to_organization.callback_data:
                 await this.editMessage(chatId, messageId, messages_1.PROMPT.SUBSCRIBE, (0, keyboard_utils_1.createOrganizationKeyboard)()

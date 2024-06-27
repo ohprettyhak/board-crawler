@@ -1,13 +1,17 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const messages_1 = require("../constants/messages");
+const subscriber_service_1 = __importDefault(require("../services/subscriber-service"));
 class CurrentController {
     constructor(bot) {
         this.bot = bot;
+        this.subscriberService = new subscriber_service_1.default();
     }
     async handleCurrentCommand(msg) {
         const chatId = msg.chat.id.toString();
-        await this.bot.sendMessage(chatId, messages_1.PROMPT.CURRENT_SUBSCRIPTIONS);
+        await this.bot.sendMessage(chatId, await this.subscriberService.getCurrentSubscriptions(chatId));
     }
 }
 exports.default = CurrentController;
