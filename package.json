@@ -7,7 +7,7 @@
     "bot"
   ],
   "scripts": {
-    "lint": "eslint '**/*.ts'",
+    "lint": "eslint",
     "postinstall": "husky install"
   },
   "devDependencies": {
