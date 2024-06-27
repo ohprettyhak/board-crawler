@@ -41,11 +41,13 @@ class TelegramService {
     text,
     replyMarkup,
   ) => {
-    await this.bot.editMessageText(text, {
+    const options: TelegramBot.EditMessageTextOptions = {
       chat_id: chatId,
       message_id: messageId,
-      reply_markup: replyMarkup,
-    });
+      ...(replyMarkup && { reply_markup: replyMarkup }),
+    };
+
+    await this.bot.editMessageText(text, options);
   };
 
   public start(): void {
