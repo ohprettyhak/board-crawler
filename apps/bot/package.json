@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint '**/*.ts'",
+    "lint": "eslint . --max-warnings 0",
     "build": "tsc && tsc-alias",
     "build:watch": "tsc --watch & tsc-alias",
     "dev": "pnpm run build:watch && node lib/app.js",
@@ -20,10 +20,9 @@
   "devDependencies": {
     "@board-crawler/eslint-config": "workspace:*",
     "@board-crawler/typescript-config": "workspace:*",
-    "@types/node": "^20.14.8",
+    "@types/node": "^20.14.9",
     "@types/node-telegram-bot-api": "^0.64.7",
-    "prettier": "^3.3.2",
     "tsc-alias": "^1.8.10",
-    "typescript": "^4.9.5"
+    "typescript": "^5.5.2"
   }
 }

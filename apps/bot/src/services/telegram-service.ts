@@ -1,10 +1,11 @@
 import TelegramBot from "node-telegram-bot-api";
+
+import { COMMANDS } from "@/constants/messages";
+import CallbackController from "@/controllers/callback-controller";
+import CurrentController from "@/controllers/current-controller";
 import StartController from "@/controllers/start-controller";
 import SubscribeController from "@/controllers/subscribe-controller";
-import CurrentController from "@/controllers/current-controller";
 import UnsubscribeController from "@/controllers/unsubscribe-controller";
-import CallbackController from "@/controllers/callback-controller";
-import { COMMANDS } from "@/constants/messages";
 
 export type EditMessageFunction = (
   chatId: string,
@@ -40,11 +41,13 @@ class TelegramService {
     text,
     replyMarkup,
   ) => {
-    await this.bot.editMessageText(text, {
+    const options: TelegramBot.EditMessageTextOptions = {
       chat_id: chatId,
       message_id: messageId,
-      reply_markup: replyMarkup,
-    });
+      ...(replyMarkup && { reply_markup: replyMarkup }),
+    };
+
+    await this.bot.editMessageText(text, options);
   };
 
   public start(): void {

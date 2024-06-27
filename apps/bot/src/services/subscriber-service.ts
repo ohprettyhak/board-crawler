@@ -1,6 +1,6 @@
+import { organizationBoards } from "@/constants/keyboards";
 import { PROMPT } from "@/constants/messages";
 import { Subscriber } from "@/models/subscriber";
-import { organizationBoards } from "@/constants/keyboards";
 import { findById, save } from "@/utils/subscriber-utils";
 
 class SubscriberService {

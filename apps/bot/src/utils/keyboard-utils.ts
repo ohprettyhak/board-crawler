@@ -1,7 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
+
 import { organizationBoards } from "@/constants/keyboards";
-import { findById } from "@/utils/subscriber-utils";
 import { Subscriber } from "@/models/subscriber";
+import { findById } from "@/utils/subscriber-utils";
 
 const createInlineKeyboard = (
   buttonKeys: string[],
