@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint '**/*.ts'",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "build": "tsc && tsc-alias",
     "build:watch": "tsc --watch & tsc-alias",
     "dev": "pnpm run build:watch && node lib/app.js",
     "prebuild": "rm -rf lib"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,json,css,md}": "prettier --write",
+    "**/*.{ts}": "eslint --fix --max-warnings 0"
   },
   "keywords": [],
   "author": "ohprettyhak",

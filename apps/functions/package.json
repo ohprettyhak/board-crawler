@@ -1,7 +1,7 @@
 {
   "name": "board-crawler-functions",
   "scripts": {
-    "lint": "eslint '**/*.ts'",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "build": "tsc && tsc-alias",
     "build:watch": "tsc --watch & tsc-alias",
     "serve": "pnpm run build && firebase emulators:start --only functions",
@@ -10,6 +10,10 @@
     "deploy": "pnpm run build && firebase deploy --only functions",
     "logs": "firebase functions:log",
     "prebuild": "rm -rf lib"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,json,css,md}": "prettier --write",
+    "**/*.{ts}": "eslint --fix --max-warnings 0"
   },
   "engines": {
     "node": "20"
