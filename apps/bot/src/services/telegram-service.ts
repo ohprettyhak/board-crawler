@@ -1,10 +1,11 @@
 import TelegramBot from "node-telegram-bot-api";
+
+import { COMMANDS } from "@/constants/messages";
+import CallbackController from "@/controllers/callback-controller";
+import CurrentController from "@/controllers/current-controller";
 import StartController from "@/controllers/start-controller";
 import SubscribeController from "@/controllers/subscribe-controller";
-import CurrentController from "@/controllers/current-controller";
 import UnsubscribeController from "@/controllers/unsubscribe-controller";
-import CallbackController from "@/controllers/callback-controller";
-import { COMMANDS } from "@/constants/messages";
 
 export type EditMessageFunction = (
   chatId: string,

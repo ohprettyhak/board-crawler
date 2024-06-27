@@ -1,4 +1,5 @@
 import TelegramBot from "node-telegram-bot-api";
+
 import { PROMPT } from "@/constants/messages";
 
 class StartController {

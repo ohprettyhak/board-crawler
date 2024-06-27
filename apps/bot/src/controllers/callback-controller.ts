@@ -1,4 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
+
+import { organizationBoards } from "@/constants/keyboards";
+import { PROMPT } from "@/constants/messages";
 import SubscriberService from "@/services/subscriber-service";
 import { EditMessageFunction } from "@/services/telegram-service";
 import {
@@ -6,8 +9,6 @@ import {
   createOrganizationKeyboard,
   createRemoveSubscriptionKeyboard,
 } from "@/utils/keyboard-utils";
-import { organizationBoards } from "@/constants/keyboards";
-import { PROMPT } from "@/constants/messages";
 
 class CallbackController {
   private readonly bot: TelegramBot;
