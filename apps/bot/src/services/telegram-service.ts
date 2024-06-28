@@ -24,7 +24,15 @@ class TelegramService {
   private readonly callbackController: CallbackController;
 
   constructor(token: string) {
-    this.bot = new TelegramBot(token, { polling: true });
+    this.bot = new TelegramBot(token, {
+      polling: true,
+      request: {
+        agentOptions: {
+          keepAlive: true,
+          family: 4,
+        },
+      },
+    } as TelegramBot.ConstructorOptions);
     this.startController = new StartController(this.bot);
     this.subscribeController = new SubscribeController(this.bot);
     this.currentController = new CurrentController(this.bot);
