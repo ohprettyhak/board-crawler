@@ -4,12 +4,11 @@
     "lint": "eslint . --max-warnings 0",
     "build": "tsc && tsc-alias",
     "build:watch": "tsc --watch & tsc-alias",
-    "serve": "pnpm run build && firebase emulators:start --only functions",
-    "shell": "pnpm run build && firebase functions:shell",
-    "start": "pnpm run shell",
-    "deploy": "pnpm run build && firebase deploy --only functions",
-    "logs": "firebase functions:log",
-    "prebuild": "rm -rf lib"
+    "serve": "npm run build && firebase emulators:start",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "npm run build && firebase deploy --only functions",
+    "logs": "firebase functions:log"
   },
   "engines": {
     "node": "20"
@@ -17,6 +16,8 @@
   "main": "lib/index.js",
   "dependencies": {
     "@google-cloud/functions-framework": "^3.4.0",
+    "axios": "^1.7.2",
+    "cheerio": "1.0.0-rc.12",
     "express": "^4.19.2",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^5.0.1",
@@ -26,8 +27,7 @@
     "typedi": "^0.10.0"
   },
   "devDependencies": {
-    "@board-crawler/eslint-config": "workspace:*",
-    "@board-crawler/typescript-config": "workspace:*",
+    "@types/cheerio": "^0.22.35",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.9",
     "@types/node-telegram-bot-api": "^0.64.7",

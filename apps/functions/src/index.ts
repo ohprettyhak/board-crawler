@@ -1,17 +1,30 @@
 import "reflect-metadata";
 
 import { onRequest } from "firebase-functions/v2/https";
+import { onSchedule } from "firebase-functions/v2/scheduler";
 import { createExpressServer, useContainer } from "routing-controllers";
 import { Container } from "typedi";
 
-import AppController from "@/controllers/AppController";
-import SubscriptionController from "@/controllers/SubscriptionController";
+import { CrawlController } from "@/controllers/crawl-controller";
+import { CrawlService } from "@/services/crawl-service";
 
 useContainer(Container);
 
 const app = createExpressServer({
-  controllers: [AppController, SubscriptionController],
+  controllers: [CrawlController],
   defaultErrorHandler: false,
 });
 
 exports.api = onRequest({ region: ["asia-northeast3"] }, app);
+
+exports.crawl = onSchedule(
+  {
+    schedule: "1 * * * *",
+    timeZone: "Asia/Seoul",
+    region: "asia-northeast3",
+  },
+  async () => {
+    const crawlService = Container.get(CrawlService);
+    await crawlService.crawlAllBoards();
+  },
+);

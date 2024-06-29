@@ -121,6 +121,8 @@ hiberfil.sys
 *.iws
 out/
 
-
 lib
 lib/**
+
+# Secret Object file
+src/configs/*.json
