@@ -1,5 +1,5 @@
 {
-  "name": "board-crawler-functions",
+  "name": "board-crawler",
   "private": true,
   "workspaces": [
     "apps/*",

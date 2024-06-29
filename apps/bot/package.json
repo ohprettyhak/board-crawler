@@ -14,8 +14,8 @@
   "author": "ohprettyhak",
   "license": "ISC",
   "dependencies": {
-    "firebase-admin": "^11.11.1",
-    "node-telegram-bot-api": "^0.66.0"
+    "firebase-admin": "^12.2.0",
+    "node-telegram-bot-api": "^0.63.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",

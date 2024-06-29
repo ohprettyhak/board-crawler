@@ -19,12 +19,12 @@ exports.api = onRequest({ region: ["asia-northeast3"] }, app);
 
 exports.crawl = onSchedule(
   {
-    schedule: "1 * * * *",
+    schedule: "every 30 minutes",
     timeZone: "Asia/Seoul",
     region: "asia-northeast3",
   },
   async () => {
-    const crawlService = Container.get(CrawlService);
+    const crawlService: CrawlService = Container.get(CrawlService);
     await crawlService.crawlAllBoards();
   },
 );

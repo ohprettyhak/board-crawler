@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ["@board-crawler/eslint-config/nodejs"],
+  extends: ["../../packages/eslint-config/nodejs"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,

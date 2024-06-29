@@ -1,5 +1,5 @@
 {
-  "extends": "@board-crawler/typescript-config/nodejs",
+  "extends": "../../packages/typescript-config/nodejs",
   "compilerOptions": {
     "baseUrl": "./src",
     "outDir": "lib"
