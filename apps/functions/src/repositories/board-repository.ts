@@ -1,25 +1,24 @@
 import { Service } from "typedi";
 
 import { Board } from "@/entities/board";
-import { converter } from "@/libs/firestore-converter";
 import BaseRepository from "@/repositories/base-repository";
 
-const COLLECTION: string = "boards";
+const COLLECTION_NAME: string = "boards";
 
 @Service()
-export class BoardRepository extends BaseRepository {
+export default class BoardRepository extends BaseRepository<Board> {
   async findAll(): Promise<Board[]> {
-    const snapshot = await this.db.collectionGroup(COLLECTION).get();
+    const snapshot = await this.db.collectionGroup(COLLECTION_NAME).get();
     return snapshot.docs.map(doc => doc.data() as Board);
   }
 
-  async save(board: Board): Promise<void> {
+  async create(board: Board): Promise<void> {
     await this.db
       .collection("organizations")
       .doc(board.organizationId)
-      .collection(COLLECTION)
+      .collection(COLLECTION_NAME)
       .doc(board.id)
-      .withConverter(converter<Board>())
+      .withConverter(this.converter())
       .set(board);
   }
 }

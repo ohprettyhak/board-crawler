@@ -4,7 +4,7 @@ import { Service } from "typedi";
 
 import { Engine } from "@/engines/engine-interface";
 import { Board } from "@/entities/board";
-import { ArticleRepository } from "@/repositories/article-repository";
+import ArticleRepository from "@/repositories/article-repository";
 
 @Service()
 export class BuilderEngine implements Engine {
@@ -14,7 +14,7 @@ export class BuilderEngine implements Engine {
     const boardArticles: string[] = await this.fetchBoardUrls(board.url);
 
     const existingUrls: Set<string> = new Set(
-      (await this.articleRepository.getTopArticles(board.id, 20)).map(
+      (await this.articleRepository.findTopArticlesByBoardId(board.id, 20)).map(
         article => article.url,
       ),
     );

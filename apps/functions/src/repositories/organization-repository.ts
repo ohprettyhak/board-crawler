@@ -1,13 +1,12 @@
 import { Service } from "typedi";
 
 import { Organization } from "@/entities/organization";
-import { converter } from "@/libs/firestore-converter";
 import BaseRepository from "@/repositories/base-repository";
 
 const COLLECTION: string = "organizations";
 
 @Service()
-export class OrganizationRepository extends BaseRepository {
+export default class OrganizationRepository extends BaseRepository<Organization> {
   async findById(id: string): Promise<Organization | null> {
     try {
       const doc = await this.db.collection(COLLECTION).doc(id).get();
@@ -18,11 +17,25 @@ export class OrganizationRepository extends BaseRepository {
     }
   }
 
-  async save(organization: Organization): Promise<void> {
+  async create(organization: Organization): Promise<void> {
     await this.db
       .collection(COLLECTION)
       .doc(organization.id)
-      .withConverter(converter<Organization>())
+      .withConverter(this.converter())
       .set(organization);
+  }
+
+  async createAll(organizations: Organization[]): Promise<void> {
+    const batch = this.db.batch();
+
+    organizations.forEach(organization => {
+      const docRef = this.db
+        .collection(COLLECTION)
+        .doc(organization.id)
+        .withConverter(this.converter());
+      batch.set(docRef, organization);
+    });
+
+    await batch.commit();
   }
 }

@@ -3,11 +3,16 @@ import { Service } from "typedi";
 import { Article } from "@/entities/article";
 import BaseRepository from "@/repositories/base-repository";
 
+const COLLECTION_NAME: string = "articles";
+
 @Service()
-export class ArticleRepository extends BaseRepository {
-  async getTopArticles(boardId: string, limit: number): Promise<Article[]> {
+export default class ArticleRepository extends BaseRepository<Article> {
+  async findTopArticlesByBoardId(
+    boardId: string,
+    limit: number,
+  ): Promise<Article[]> {
     const articlesSnapshot = await this.db
-      .collectionGroup("articles")
+      .collectionGroup(COLLECTION_NAME)
       .where("boardId", "==", boardId)
       .orderBy("createdAt", "desc")
       .limit(limit)

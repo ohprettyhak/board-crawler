@@ -1,14 +1,19 @@
 import { Service } from "typedi";
+// eslint-disable-next-line import/named
+import { v1 as uuidv1 } from "uuid";
 
 import { EngineFactory } from "@/engines/engine-factory";
 import { Engine } from "@/engines/engine-interface";
 import { Board } from "@/entities/board";
-import { BoardRepository } from "@/repositories/board-repository";
+import { FetchQueue } from "@/entities/fetch-queue";
+import BoardRepository from "@/repositories/board-repository";
+import FetchQueueRepository from "@/repositories/fetch-queue-repository";
 
 @Service()
-export class CrawlService {
+export default class CrawlService {
   constructor(
     private boardRepository: BoardRepository,
+    private fetchQueueRepository: FetchQueueRepository,
     private engineFactory: EngineFactory,
   ) {}
 
@@ -19,10 +24,17 @@ export class CrawlService {
     const crawlPromises = boards.map(async board => {
       const engine: Engine = this.engineFactory.getEngine(board.engine);
       const urls: string[] = await engine.crawl(board);
-      console.log(`Crawled data for board ${board.name}, ${urls}`);
+
+      const urlQueues: FetchQueue[] = urls.map(url => ({
+        id: uuidv1(),
+        url,
+        boardId: board.id,
+        processed: false,
+      }));
+
+      await this.fetchQueueRepository.createAll(urlQueues);
     });
 
     await Promise.all(crawlPromises);
-    console.log("Crawling all boards completed.");
   }
 }

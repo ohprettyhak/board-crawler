@@ -5,8 +5,8 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 import { createExpressServer, useContainer } from "routing-controllers";
 import { Container } from "typedi";
 
-import { CrawlController } from "@/controllers/crawl-controller";
-import { CrawlService } from "@/services/crawl-service";
+import CrawlController from "@/controllers/crawl-controller";
+import CrawlService from "@/services/crawl-service";
 
 useContainer(Container);
 

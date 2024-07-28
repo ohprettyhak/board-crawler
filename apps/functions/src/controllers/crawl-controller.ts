@@ -3,13 +3,13 @@ import { Service } from "typedi";
 
 import { Board } from "@/entities/board";
 import { Organization } from "@/entities/organization";
-import { BoardRepository } from "@/repositories/board-repository";
-import { OrganizationRepository } from "@/repositories/organization-repository";
-import { CrawlService } from "@/services/crawl-service";
+import BoardRepository from "@/repositories/board-repository";
+import OrganizationRepository from "@/repositories/organization-repository";
+import CrawlService from "@/services/crawl-service";
 
 @Service()
 @JsonController("/crawl")
-export class CrawlController {
+export default class CrawlController {
   constructor(
     private crawlService: CrawlService,
     private organizationRepository: OrganizationRepository,
@@ -46,11 +46,11 @@ export class CrawlController {
     ];
 
     for (const organization of organizations) {
-      await this.organizationRepository.save(organization);
+      await this.organizationRepository.create(organization);
     }
 
     for (const board of boards) {
-      await this.boardRepository.save(board);
+      await this.boardRepository.create(board);
     }
 
     return { message: "Temp data added" };
