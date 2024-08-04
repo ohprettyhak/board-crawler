@@ -1,12 +1,12 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot from 'node-telegram-bot-api';
 
-import { organizationBoards } from "@/constants/keyboards";
-import { Subscriber } from "@/models/subscriber";
-import { findById } from "@/utils/subscriber-utils";
+import { organizationBoards } from '@/constants/keyboards';
+import { Subscriber } from '@/models/subscriber';
+import { findById } from '@/utils/subscriber-utils';
 
 const createInlineKeyboard = (
   buttonKeys: string[],
-  prefix: string = "",
+  prefix: string = '',
 ): TelegramBot.SendMessageOptions => ({
   reply_markup: {
     inline_keyboard: buttonKeys.map(key => [
@@ -18,11 +18,10 @@ const createInlineKeyboard = (
   },
 });
 
-export const createOrganizationKeyboard =
-  (): TelegramBot.SendMessageOptions => {
-    const buttonKeys = [organizationBoards.hufs.callback_data];
-    return createInlineKeyboard(buttonKeys);
-  };
+export const createOrganizationKeyboard = (): TelegramBot.SendMessageOptions => {
+  const buttonKeys = [organizationBoards.hufs.callback_data];
+  return createInlineKeyboard(buttonKeys);
+};
 
 export const createHUFSBoardKeyboard = (): TelegramBot.SendMessageOptions => {
   const buttonKeys: string[] = [
@@ -40,7 +39,7 @@ export const createRemoveSubscriptionKeyboard = async (
 
   if (subscriber && subscriber.subscribedBoards.length > 0) {
     const buttonKeys = subscriber.subscribedBoards;
-    return createInlineKeyboard(buttonKeys, "unsubscribe_");
+    return createInlineKeyboard(buttonKeys, 'unsubscribe_');
   } else {
     return null;
   }

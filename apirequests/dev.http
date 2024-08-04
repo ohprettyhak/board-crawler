@@ -1,7 +1,7 @@
 ### Organization, Borad 추가
-GET {{baseurl}}/crawl/temp-data
+GET {{baseurl}}/fetch/temp-data
 Accept: application/json
 
-###
-GET {{baseurl}}/crawl/
+### Board Crawl
+GET {{baseurl}}/fetch/
 Accept: application/json

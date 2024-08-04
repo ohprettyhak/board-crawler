@@ -1,6 +1,6 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot from 'node-telegram-bot-api';
 
-import SubscriberService from "@/services/subscriber-service";
+import SubscriberService from '@/services/subscriber-service';
 
 class CurrentController {
   private readonly bot: TelegramBot;

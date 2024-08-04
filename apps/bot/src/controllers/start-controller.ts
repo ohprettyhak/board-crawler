@@ -1,6 +1,6 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot from 'node-telegram-bot-api';
 
-import { PROMPT } from "@/constants/messages";
+import { PROMPT } from '@/constants/messages';
 
 class StartController {
   private readonly bot: TelegramBot;
