@@ -21,7 +21,7 @@ const app = createExpressServer({
 
 exports.api = onRequest({ region: ['asia-northeast3'] }, app);
 
-exports.crawlBoards = onSchedule(
+exports.onCrawlBoards = onSchedule(
   {
     schedule: 'every 30 minutes',
     timeZone: 'Asia/Seoul',
@@ -33,7 +33,7 @@ exports.crawlBoards = onSchedule(
   },
 );
 
-exports.crawlFetchQueue = onDocumentCreated(
+exports.onCrawlFetchQueue = onDocumentCreated(
   {
     document: 'fetch_queues/{id}',
     region: 'asia-northeast3',
@@ -51,7 +51,7 @@ exports.crawlFetchQueue = onDocumentCreated(
   },
 );
 
-exports.notifyArticle = onDocumentCreated(
+exports.onNotifyArticle = onDocumentCreated(
   {
     document: 'organizations/{organizationsId}/boards/{boardsId}/articles/{articlesId}',
     region: 'asia-northeast3',
