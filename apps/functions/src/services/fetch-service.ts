@@ -1,15 +1,15 @@
-import { Service } from "typedi";
-import { v4 as uuid } from "uuid";
+import { Service } from 'typedi';
+import { v4 as uuid } from 'uuid';
 
-import { GENERATOR } from "@/constants/generator";
-import { EngineFactory } from "@/engines/engine-factory";
-import { Engine } from "@/engines/engine-interface";
-import { Board } from "@/entities/board";
-import { FetchQueue } from "@/entities/fetch-queue";
-import ArticleRepository from "@/repositories/article-repository";
-import BoardRepository from "@/repositories/board-repository";
-import FetchQueueRepository from "@/repositories/fetch-queue-repository";
-import GeneratorRepository from "@/repositories/generator-repository";
+import { GENERATOR } from '@/constants/generator';
+import { EngineFactory } from '@/engines/engine-factory';
+import { Engine } from '@/engines/engine-interface';
+import { Board } from '@/entities/board';
+import { FetchQueue } from '@/entities/fetch-queue';
+import ArticleRepository from '@/repositories/article-repository';
+import BoardRepository from '@/repositories/board-repository';
+import FetchQueueRepository from '@/repositories/fetch-queue-repository';
+import GeneratorRepository from '@/repositories/generator-repository';
 
 @Service()
 export default class FetchService {
@@ -34,7 +34,7 @@ export default class FetchService {
         organizationId: board.organizationId,
         processed: false,
         engine: board.engine,
-        url: `${board.baseUrl}/${url}`.replace(/\/{2,}/g, "/"),
+        url: `${board.baseUrl}/${url}`.replace(/\/{2,}/g, '/'),
       }));
 
       await this.fetchQueueRepository.createAll(fetchQueueItems);
@@ -70,7 +70,7 @@ export default class FetchService {
 
     fetchQueue.processed = true;
     fetchQueue.generatorId = ref.id;
-    await this.fetchQueueRepository.update(fetchQueue);
+    await this.fetchQueueRepository.update({ ...fetchQueue });
 
     return;
   }

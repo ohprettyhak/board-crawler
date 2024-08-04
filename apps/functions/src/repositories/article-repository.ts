@@ -1,11 +1,11 @@
-import { DocumentData, FieldValue, QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { Service } from "typedi";
+import { DocumentData, FieldValue, QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { Service } from 'typedi';
 
-import { COLLECTION } from "@/constants/store";
-import { Article } from "@/entities/article";
-import { FirebaseClient } from "@/libs/firebase-client";
-import { ConverterMode } from "@/libs/firestore-converter";
-import BaseRepository from "@/repositories/base-repository";
+import { COLLECTION } from '@/constants/store';
+import { Article } from '@/entities/article';
+import { FirebaseClient } from '@/libs/firebase-client';
+import { ConverterMode } from '@/libs/firestore-converter';
+import BaseRepository from '@/repositories/base-repository';
 
 @Service()
 export default class ArticleRepository extends BaseRepository<Article> {
@@ -27,7 +27,7 @@ export default class ArticleRepository extends BaseRepository<Article> {
           ...data,
           id: snapshot.id,
           createdAt: data.createdAt.toDate(),
-          modifiedAt: data.crawledAt.toDate(),
+          modifiedAt: data.modifiedAt && data.modifiedAt.toDate(),
         } as Article;
       },
     });
@@ -36,8 +36,8 @@ export default class ArticleRepository extends BaseRepository<Article> {
   async findTopArticlesByBoardId(boardId: string, limit: number): Promise<Article[]> {
     const articlesSnapshot = await this.db
       .collectionGroup(COLLECTION.ARTICLES)
-      .where("boardId", "==", boardId)
-      .orderBy("createdAt", "desc")
+      .where('boardId', '==', boardId)
+      .orderBy('createdAt', 'desc')
       .limit(limit)
       .get();
 

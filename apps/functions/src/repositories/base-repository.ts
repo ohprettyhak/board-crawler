@@ -1,8 +1,8 @@
-import { Firestore, FirestoreDataConverter } from "firebase-admin/firestore";
-import { Service } from "typedi";
+import { Firestore, FirestoreDataConverter } from 'firebase-admin/firestore';
+import { Service } from 'typedi';
 
-import { FirebaseClient } from "@/libs/firebase-client";
-import { converter, ConverterMode } from "@/libs/firestore-converter";
+import { FirebaseClient } from '@/libs/firebase-client';
+import { converter, ConverterMode } from '@/libs/firestore-converter';
 
 @Service()
 export default class BaseRepository<T> {

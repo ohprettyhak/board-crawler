@@ -1,11 +1,11 @@
-import { Service } from "typedi";
+import { Service } from 'typedi';
 
-import { Engine } from "@/engines/engine-interface";
-import { Board } from "@/entities/board";
-import ArticleRepository from "@/repositories/article-repository";
-import { ArticleCrawlType } from "@/types/article";
+import { Engine } from '@/engines/engine-interface';
+import { ArticleCrawlType } from '@/entities/article';
+import { Board } from '@/entities/board';
+import ArticleRepository from '@/repositories/article-repository';
 
-import { fetchArticleContent, fetchBoardUrls } from "./helper";
+import { fetchArticleContent, fetchBoardUrls } from './helper';
 
 @Service()
 export class BuilderEngine implements Engine {

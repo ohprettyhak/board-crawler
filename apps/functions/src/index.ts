@@ -1,15 +1,16 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 
-import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { onDocumentCreated } from "firebase-functions/v2/firestore";
-import { onRequest } from "firebase-functions/v2/https";
-import { onSchedule } from "firebase-functions/v2/scheduler";
-import { createExpressServer, useContainer } from "routing-controllers";
-import { Container } from "typedi";
+import { QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
+import { onRequest } from 'firebase-functions/v2/https';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
+import { createExpressServer, useContainer } from 'routing-controllers';
+import { Container } from 'typedi';
 
-import FetchController from "@/controllers/fetch-controller";
-import { FetchQueue } from "@/entities/fetch-queue";
-import FetchService from "@/services/fetch-service";
+import FetchController from '@/controllers/fetch-controller';
+import { Article } from '@/entities/article';
+import { FetchQueue } from '@/entities/fetch-queue';
+import FetchService from '@/services/fetch-service';
 
 useContainer(Container);
 
@@ -18,13 +19,13 @@ const app = createExpressServer({
   defaultErrorHandler: false,
 });
 
-exports.api = onRequest({ region: ["asia-northeast3"] }, app);
+exports.api = onRequest({ region: ['asia-northeast3'] }, app);
 
 exports.crawlBoards = onSchedule(
   {
-    schedule: "every 30 minutes",
-    timeZone: "Asia/Seoul",
-    region: "asia-northeast3",
+    schedule: 'every 30 minutes',
+    timeZone: 'Asia/Seoul',
+    region: 'asia-northeast3',
   },
   async () => {
     const crawlService: FetchService = Container.get(FetchService);
@@ -32,10 +33,10 @@ exports.crawlBoards = onSchedule(
   },
 );
 
-exports.crawlArticle = onDocumentCreated(
+exports.crawlFetchQueue = onDocumentCreated(
   {
-    document: "fetch_queues/{id}",
-    region: "asia-northeast3",
+    document: 'fetch_queues/{id}',
+    region: 'asia-northeast3',
   },
   async event => {
     const snapshot: QueryDocumentSnapshot | undefined = event.data;
@@ -45,6 +46,23 @@ exports.crawlArticle = onDocumentCreated(
 
     const crawlService: FetchService = Container.get(FetchService);
     await crawlService.crawlArticleContent(data);
+
+    return;
+  },
+);
+
+exports.notifyArticle = onDocumentCreated(
+  {
+    document: 'organizations/{organizationsId}/boards/{boardsId}/articles/{articlesId}',
+    region: 'asia-northeast3',
+  },
+  async event => {
+    const snapshot: QueryDocumentSnapshot | undefined = event.data;
+    if (!snapshot) return;
+
+    const data: Article = snapshot.data() as Article;
+    console.log(JSON.stringify(data));
+
     return;
   },
 );

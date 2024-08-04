@@ -1,13 +1,13 @@
-import { Service } from "typedi";
+import { Service } from 'typedi';
 
-import { COLLECTION } from "@/constants/store";
-import { Board } from "@/entities/board";
-import BaseRepository from "@/repositories/base-repository";
+import { COLLECTION } from '@/constants/store';
+import { Board } from '@/entities/board';
+import BaseRepository from '@/repositories/base-repository';
 
 @Service()
 export default class BoardRepository extends BaseRepository<Board> {
   async findById(id: string): Promise<Board | null> {
-    const snapshot = await this.db.collectionGroup(COLLECTION.BOARDS).where("id", "==", id).get();
+    const snapshot = await this.db.collectionGroup(COLLECTION.BOARDS).where('id', '==', id).get();
 
     if (snapshot.empty) return null;
     return snapshot.docs[0].data() as Board;

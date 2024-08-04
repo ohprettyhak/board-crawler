@@ -1,5 +1,5 @@
-import { Board } from "@/entities/board";
-import { ArticleCrawlType } from "@/types/article";
+import { ArticleCrawlType } from '@/entities/article';
+import { Board } from '@/entities/board';
 
 export interface Engine {
   fetchNewArticleUrls(board: Board): Promise<string[]>;

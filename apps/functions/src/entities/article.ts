@@ -11,3 +11,10 @@ export interface Article {
   title: string;
   url: string;
 }
+
+export interface ArticleCrawlType {
+  title: string;
+  content: string;
+  timestamp: string;
+  author: string;
+}

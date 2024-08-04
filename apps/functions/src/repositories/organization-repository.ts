@@ -1,8 +1,8 @@
-import { Service } from "typedi";
+import { Service } from 'typedi';
 
-import { COLLECTION } from "@/constants/store";
-import { Organization } from "@/entities/organization";
-import BaseRepository from "@/repositories/base-repository";
+import { COLLECTION } from '@/constants/store';
+import { Organization } from '@/entities/organization';
+import BaseRepository from '@/repositories/base-repository';
 
 @Service()
 export default class OrganizationRepository extends BaseRepository<Organization> {

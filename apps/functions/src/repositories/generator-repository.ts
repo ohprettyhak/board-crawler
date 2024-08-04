@@ -1,9 +1,9 @@
-import { Service } from "typedi";
+import { Service } from 'typedi';
 
-import { COLLECTION } from "@/constants/store";
-import { Generator } from "@/entities/generator";
-import { FirebaseClient } from "@/libs/firebase-client";
-import BaseRepository from "@/repositories/base-repository";
+import { COLLECTION } from '@/constants/store';
+import { Generator } from '@/entities/generator';
+import { FirebaseClient } from '@/libs/firebase-client';
+import BaseRepository from '@/repositories/base-repository';
 
 @Service()
 export default class GeneratorRepository extends BaseRepository<Generator> {

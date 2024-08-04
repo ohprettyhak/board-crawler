@@ -1,7 +1,7 @@
-import { firestore } from "firebase-admin";
-import { App, initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { Service } from "typedi";
+import { firestore } from 'firebase-admin';
+import { App, initializeApp } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { Service } from 'typedi';
 
 @Service()
 export class FirebaseClient {

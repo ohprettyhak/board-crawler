@@ -1,7 +1,7 @@
-import { Service } from "typedi";
+import { Service } from 'typedi';
 
-import { BuilderEngine } from "@/engines/builder-engine";
-import { Engine } from "@/engines/engine-interface";
+import { BuilderEngine } from '@/engines/builder-engine';
+import { Engine } from '@/engines/engine-interface';
 
 @Service()
 export class EngineFactory {
@@ -9,7 +9,7 @@ export class EngineFactory {
 
   getEngine(engineName: string): Engine {
     switch (engineName) {
-      case "builder":
+      case 'builder':
         return this.builderEngine;
       default:
         throw new Error(`Unknown engine: ${engineName}`);

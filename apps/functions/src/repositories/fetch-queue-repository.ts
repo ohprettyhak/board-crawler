@@ -1,11 +1,11 @@
-import { DocumentData, FieldValue, QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { Service } from "typedi";
+import { DocumentData, FieldValue, QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { Service } from 'typedi';
 
-import { COLLECTION } from "@/constants/store";
-import { FetchQueue } from "@/entities/fetch-queue";
-import { FirebaseClient } from "@/libs/firebase-client";
-import { ConverterMode } from "@/libs/firestore-converter";
-import BaseRepository from "@/repositories/base-repository";
+import { COLLECTION } from '@/constants/store';
+import { FetchQueue } from '@/entities/fetch-queue';
+import { FirebaseClient } from '@/libs/firebase-client';
+import { ConverterMode } from '@/libs/firestore-converter';
+import BaseRepository from '@/repositories/base-repository';
 
 @Service()
 export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
@@ -26,9 +26,6 @@ export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
         return {
           ...data,
           id: snapshot.id,
-          boardId: "",
-          processed: false,
-          url: "",
           createdAt: data.createdAt.toDate(),
         } as FetchQueue;
       },

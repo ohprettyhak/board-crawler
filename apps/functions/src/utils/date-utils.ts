@@ -1,12 +1,12 @@
-import dayjs, { Dayjs, locale } from "dayjs";
-import "dayjs/locale/ko";
+import dayjs, { Dayjs, locale } from 'dayjs';
+import 'dayjs/locale/ko';
 
-locale("ko");
+locale('ko');
 
 export const formatTime = (
   format: string,
   time: string | Date | Dayjs = dayjs(),
-  locale: string = "ko",
+  locale: string = 'ko',
 ) => {
   return dayjs(time).locale(locale).format(format);
 };
