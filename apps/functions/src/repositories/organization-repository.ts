@@ -1,15 +1,14 @@
 import { Service } from "typedi";
 
+import { COLLECTION } from "@/constants/store";
 import { Organization } from "@/entities/organization";
 import BaseRepository from "@/repositories/base-repository";
-
-const COLLECTION: string = "organizations";
 
 @Service()
 export default class OrganizationRepository extends BaseRepository<Organization> {
   async findById(id: string): Promise<Organization | null> {
     try {
-      const doc = await this.db.collection(COLLECTION).doc(id).get();
+      const doc = await this.db.collection(COLLECTION.ORGANIZATIONS).doc(id).get();
       return doc.exists ? (doc.data() as Organization) : null;
     } catch (error) {
       console.error(`Error fetching organization with id ${id}: `, error);
@@ -19,7 +18,7 @@ export default class OrganizationRepository extends BaseRepository<Organization>
 
   async create(organization: Organization): Promise<void> {
     await this.db
-      .collection(COLLECTION)
+      .collection(COLLECTION.ORGANIZATIONS)
       .doc(organization.id)
       .withConverter(this.converter())
       .set(organization);
@@ -30,7 +29,7 @@ export default class OrganizationRepository extends BaseRepository<Organization>
 
     organizations.forEach(organization => {
       const docRef = this.db
-        .collection(COLLECTION)
+        .collection(COLLECTION.ORGANIZATIONS)
         .doc(organization.id)
         .withConverter(this.converter());
       batch.set(docRef, organization);

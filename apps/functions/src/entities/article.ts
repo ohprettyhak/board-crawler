@@ -1,8 +1,13 @@
 export interface Article {
-  title: string;
-  content: string;
-  url: string;
+  author: string;
   boardId: string;
-  createdAt?: string;
-  crawledAt?: string;
+  content: string;
+  createdAt?: Date;
+  generatorId?: string;
+  id: string;
+  modifiedAt?: Date;
+  organizationId: string;
+  publishedAt: Date;
+  title: string;
+  url: string;
 }

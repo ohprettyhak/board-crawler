@@ -1,8 +1,11 @@
 export interface FetchQueue {
-  id: string;
-  url: string;
   boardId: string;
-  processed: boolean;
   createdAt?: Date;
+  engine: string;
+  generatorId?: string;
+  id: string;
   modifiedAt?: Date;
+  organizationId: string;
+  processed: boolean;
+  url: string;
 }

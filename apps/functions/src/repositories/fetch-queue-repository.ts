@@ -1,16 +1,11 @@
-import {
-  DocumentData,
-  FieldValue,
-  QueryDocumentSnapshot,
-} from "firebase-admin/firestore";
+import { DocumentData, FieldValue, QueryDocumentSnapshot } from "firebase-admin/firestore";
 import { Service } from "typedi";
 
+import { COLLECTION } from "@/constants/store";
 import { FetchQueue } from "@/entities/fetch-queue";
 import { FirebaseClient } from "@/libs/firebase-client";
 import { ConverterMode } from "@/libs/firestore-converter";
 import BaseRepository from "@/repositories/base-repository";
-
-const COLLECTION_NAME: string = "fetch_queues";
 
 @Service()
 export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
@@ -42,8 +37,8 @@ export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
 
   async create(fetchQueue: FetchQueue): Promise<void> {
     const docRef = this.db
-      .collection(COLLECTION_NAME)
-      .doc()
+      .collection(COLLECTION.FETCH_QUEUES)
+      .doc(fetchQueue.id)
       .withConverter(this.converter());
     await docRef.set(fetchQueue);
   }
@@ -53,12 +48,20 @@ export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
 
     fetchQueues.forEach(fetchQueue => {
       const docRef = this.db
-        .collection(COLLECTION_NAME)
-        .doc()
+        .collection(COLLECTION.FETCH_QUEUES)
+        .doc(fetchQueue.id)
         .withConverter(this.converter(ConverterMode.CREATE));
       batch.set(docRef, fetchQueue);
     });
 
     await batch.commit();
+  }
+
+  async update(fetchQueue: FetchQueue): Promise<void> {
+    await this.db
+      .collection(COLLECTION.FETCH_QUEUES)
+      .doc(fetchQueue.id)
+      .withConverter(this.converter(ConverterMode.UPDATE))
+      .set(fetchQueue);
   }
 }

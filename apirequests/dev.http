@@ -1,0 +1,7 @@
+### Organization, Borad 추가
+GET {{baseurl}}/crawl/temp-data
+Accept: application/json
+
+###
+GET {{baseurl}}/crawl/
+Accept: application/json
