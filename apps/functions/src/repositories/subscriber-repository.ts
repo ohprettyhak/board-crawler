@@ -15,4 +15,17 @@ export default class SubscriberRepository extends BaseRepository<Subscriber> {
       return null;
     }
   }
+
+  async findByBoardId(boardId: string): Promise<Subscriber[]> {
+    try {
+      const snapshot = await this.db
+        .collection(COLLECTION.SUBSCRIBERS)
+        .where('boardId', '==', boardId)
+        .get();
+      return snapshot.docs.map(doc => doc.data() as Subscriber);
+    } catch (error) {
+      console.error(`Error fetching subscribers for board ${boardId}: `, error);
+      return [];
+    }
+  }
 }

@@ -6,16 +6,22 @@ export const cleanCrawledText = (
 ): string => {
   let formattedText: string = input.trim();
 
-  const removePrefix = (prefix: string): void => {
-    const prefixRegex: RegExp = new RegExp(`^${prefix}\\s*.*?:\\s*`);
-    formattedText = formattedText.replace(prefixRegex, '');
+  const cleanText = (prefixes: string[]): void => {
+    for (const prefix of prefixes) {
+      const prefixRegex: RegExp = new RegExp(`^${prefix}\\s*:?\\s*(.*)`);
+      const match = formattedText.match(prefixRegex);
+      if (match) {
+        formattedText = match[1].trim();
+        break;
+      }
+    }
   };
 
   switch (formatType) {
-    case 'title':
-      removePrefix('제목');
+    case 'title': {
+      cleanText(['제목']);
       break;
-
+    }
     case 'timestamp': {
       const dateMatch: RegExpMatchArray | null = formattedText.match(
         /^작성일\s*:\s*(\d{2,4})\.(\d{2})\.(\d{2})/,
@@ -29,12 +35,14 @@ export const cleanCrawledText = (
       }
       break;
     }
-
-    case 'author':
-      removePrefix('작성자');
-      removePrefix('글쓴이');
+    case 'author': {
+      cleanText(['작성자', '글쓴이']);
+      const authorMatch: RegExpMatchArray | null = formattedText.match(/^(\w+)/);
+      if (authorMatch) {
+        formattedText = authorMatch[1];
+      }
       break;
-
+    }
     default:
       break;
   }

@@ -11,17 +11,19 @@ import { fetchArticleContent, fetchBoardUrls } from './helper';
 export class BuilderEngine implements Engine {
   constructor(private articleRepository: ArticleRepository) {}
 
-  async fetchNewArticleUrls(board: Board): Promise<string[]> {
-    const boardArticles: string[] = await fetchBoardUrls(board.url);
+  async fetchArticleUrls(board: Board): Promise<string[]> {
+    const fetchedArticles: string[] = await fetchBoardUrls(board.url);
 
-    const existingUrls: Set<string> = new Set(
+    const uniqueBoardArticles: Set<string> = new Set(fetchedArticles);
+
+    const existingArticleUrls: Set<string> = new Set(
       (await this.articleRepository.findTopArticlesByBoardId(board.id, 30)).map(
         article => article.url,
       ),
     );
 
-    return boardArticles.filter(url => {
-      return !Array.from(existingUrls).some(existingUrl => url.includes(existingUrl));
+    return Array.from(uniqueBoardArticles).filter(url => {
+      return !Array.from(existingArticleUrls).some(existingUrl => existingUrl.includes(url));
     });
   }
 

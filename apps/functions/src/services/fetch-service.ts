@@ -26,7 +26,7 @@ export default class FetchService {
 
     const crawlPromises: Promise<void>[] = boards.map(async board => {
       const engine: Engine = this.engineFactory.getEngine(board.engine);
-      const newArticleUrls: string[] = await engine.fetchNewArticleUrls(board);
+      const newArticleUrls: string[] = await engine.fetchArticleUrls(board);
 
       const fetchQueueItems: FetchQueue[] = newArticleUrls.map(url => ({
         id: uuid(),

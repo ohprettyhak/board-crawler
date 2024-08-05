@@ -1,15 +1,11 @@
 import 'reflect-metadata';
 
-import { QueryDocumentSnapshot } from 'firebase-admin/firestore';
-import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 import { onRequest } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { createExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 
 import FetchController from '@/controllers/fetch-controller';
-import { Article } from '@/entities/article';
-import { FetchQueue } from '@/entities/fetch-queue';
 import FetchService from '@/services/fetch-service';
 
 useContainer(Container);
@@ -33,35 +29,28 @@ exports.onCrawlBoards = onSchedule(
   },
 );
 
-exports.onCrawlFetchQueue = onDocumentCreated(
+exports.onCrawlFetchQueue = onSchedule(
   {
-    document: 'fetch_queues/{id}',
+    schedule: 'every 10 minutes',
+    timeZone: 'Asia/Seoul',
     region: 'asia-northeast3',
   },
-  async event => {
-    const snapshot: QueryDocumentSnapshot | undefined = event.data;
-    if (!snapshot) return;
-
-    const data: FetchQueue = snapshot.data() as FetchQueue;
-
-    const crawlService: FetchService = Container.get(FetchService);
-    await crawlService.crawlArticleContent(data);
+  async () => {
+    // const crawlService: FetchService = Container.get(FetchService);
+    // await crawlService.crawlArticleContent(data);
 
     return;
   },
 );
 
-exports.onNotifyArticle = onDocumentCreated(
+exports.onNotifyArticle = onSchedule(
   {
-    document: 'organizations/{organizationsId}/boards/{boardsId}/articles/{articlesId}',
+    schedule: 'every 10 minutes',
+    timeZone: 'Asia/Seoul',
     region: 'asia-northeast3',
   },
-  async event => {
-    const snapshot: QueryDocumentSnapshot | undefined = event.data;
-    if (!snapshot) return;
-
-    const data: Article = snapshot.data() as Article;
-    console.log(JSON.stringify(data));
+  async () => {
+    // console.log('notify');
 
     return;
   },
