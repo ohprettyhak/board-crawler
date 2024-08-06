@@ -6,7 +6,9 @@ import { createExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 
 import FetchController from '@/controllers/fetch-controller';
+import { Article } from '@/entities/article';
 import FetchService from '@/services/fetch-service';
+import { sleep } from '@/utils/date-utils';
 
 useContainer(Container);
 
@@ -23,7 +25,7 @@ exports.onCrawlBoards = onSchedule(
     timeZone: 'Asia/Seoul',
     region: 'asia-northeast3',
   },
-  async () => {
+  async (): Promise<void> => {
     const crawlService: FetchService = Container.get(FetchService);
     await crawlService.crawlAndQueueAllBoards();
   },
@@ -35,9 +37,14 @@ exports.onCrawlFetchQueue = onSchedule(
     timeZone: 'Asia/Seoul',
     region: 'asia-northeast3',
   },
-  async () => {
-    // const crawlService: FetchService = Container.get(FetchService);
-    // await crawlService.crawlArticleContent(data);
+  async (): Promise<void> => {
+    const crawlService: FetchService = Container.get(FetchService);
+
+    for (let attempt: number = 0; attempt < 5; attempt++) {
+      const articles: Article[] = await crawlService.crawlArticleContent();
+      if (articles.length === 0) break;
+      await sleep(2000);
+    }
 
     return;
   },
@@ -49,7 +56,7 @@ exports.onNotifyArticle = onSchedule(
     timeZone: 'Asia/Seoul',
     region: 'asia-northeast3',
   },
-  async () => {
+  async (): Promise<void> => {
     // console.log('notify');
 
     return;

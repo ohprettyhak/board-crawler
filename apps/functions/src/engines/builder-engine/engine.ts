@@ -3,27 +3,27 @@ import { Service } from 'typedi';
 import { Engine } from '@/engines/engine-interface';
 import { ArticleCrawlType } from '@/entities/article';
 import { Board } from '@/entities/board';
-import ArticleRepository from '@/repositories/article-repository';
+import FetchQueueRepository from '@/repositories/fetch-queue-repository';
 
 import { fetchArticleContent, fetchBoardUrls } from './helper';
 
 @Service()
 export class BuilderEngine implements Engine {
-  constructor(private articleRepository: ArticleRepository) {}
+  constructor(private fetchQueueRepository: FetchQueueRepository) {}
 
   async fetchArticleUrls(board: Board): Promise<string[]> {
-    const fetchedArticles: string[] = await fetchBoardUrls(board.url);
+    const newlyFetchedUrls: string[] = await fetchBoardUrls(board.url);
 
-    const uniqueBoardArticles: Set<string> = new Set(fetchedArticles);
+    const uniqueNewUrls: Set<string> = new Set(newlyFetchedUrls);
 
-    const existingArticleUrls: Set<string> = new Set(
-      (await this.articleRepository.findTopArticlesByBoardId(board.id, 30)).map(
-        article => article.url,
-      ),
+    const existingQueues = await this.fetchQueueRepository.findTopFetchQueuesByBoardId(
+      board.id,
+      30,
     );
+    const existingUrls: Set<string> = new Set(existingQueues.map(queue => queue.url));
 
-    return Array.from(uniqueBoardArticles).filter(url => {
-      return !Array.from(existingArticleUrls).some(existingUrl => existingUrl.includes(url));
+    return Array.from(uniqueNewUrls).filter(newUrl => {
+      return !Array.from(existingUrls).some(existingUrl => existingUrl.includes(newUrl));
     });
   }
 

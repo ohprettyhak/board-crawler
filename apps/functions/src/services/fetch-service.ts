@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { GENERATOR } from '@/constants/generator';
 import { EngineFactory } from '@/engines/engine-factory';
 import { Engine } from '@/engines/engine-interface';
+import { Article } from '@/entities/article';
 import { Board } from '@/entities/board';
 import { FetchQueue } from '@/entities/fetch-queue';
 import ArticleRepository from '@/repositories/article-repository';
@@ -43,35 +44,53 @@ export default class FetchService {
     await Promise.all(crawlPromises);
   }
 
-  async crawlArticleContent(fetchQueue: FetchQueue): Promise<void> {
-    const engine: Engine = this.engineFactory.getEngine(fetchQueue.engine);
-    const { title, content, timestamp, author } = await engine.fetchArticleContent(fetchQueue.url);
-    const ref = await this.generatorRepository.createWithRef({
-      prompt: `${GENERATOR.BASE_PROMPT} ${content}`,
-    });
+  async crawlArticleContent(): Promise<Article[]> {
+    const fetchQueues: FetchQueue[] = await this.fetchQueueRepository.findUnprocessedQueues(5);
+    const articles: Article[] = [];
 
-    const response: string = await new Promise(resolve => {
-      this.generatorRepository.subscribeToChanges(ref, (response: string) => {
-        resolve(response);
-      });
-    });
+    await Promise.all(
+      fetchQueues.map(async fetchQueue => {
+        try {
+          const engine: Engine = this.engineFactory.getEngine(fetchQueue.engine);
+          const { title, content, timestamp, author } = await engine.fetchArticleContent(
+            fetchQueue.url,
+          );
 
-    await this.articleRepository.create({
-      id: uuid(),
-      title,
-      author,
-      url: fetchQueue.url,
-      content: response,
-      organizationId: fetchQueue.organizationId,
-      boardId: fetchQueue.boardId,
-      generatorId: ref.id,
-      publishedAt: new Date(timestamp),
-    });
+          const ref = await this.generatorRepository.createWithRef({
+            prompt: `${GENERATOR.BASE_PROMPT}${content}\n</Content>`,
+          });
 
-    fetchQueue.processed = true;
-    fetchQueue.generatorId = ref.id;
-    await this.fetchQueueRepository.update({ ...fetchQueue });
+          const response: string = await new Promise(resolve => {
+            this.generatorRepository.subscribeToChanges(ref, (response: string) => {
+              resolve(response);
+            });
+          });
 
-    return;
+          const article: Article = {
+            id: uuid(),
+            title,
+            author,
+            url: fetchQueue.url,
+            content: response,
+            organizationId: fetchQueue.organizationId,
+            boardId: fetchQueue.boardId,
+            generatorId: ref.id,
+            publishedAt: new Date(timestamp),
+          };
+
+          await this.articleRepository.create(article);
+
+          fetchQueue.processed = true;
+          fetchQueue.generatorId = ref.id;
+          await this.fetchQueueRepository.update(fetchQueue);
+
+          articles.push(article);
+        } catch (error) {
+          console.error(`Failed to process fetchQueue with id ${fetchQueue.id}:`, error);
+        }
+      }),
+    );
+
+    return articles;
   }
 }

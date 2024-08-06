@@ -27,6 +27,7 @@ export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
           ...data,
           id: snapshot.id,
           createdAt: data.createdAt.toDate(),
+          modifiedAt: data.modifiedAt ? data.modifiedAt.toDate() : undefined,
         } as FetchQueue;
       },
     });
@@ -60,5 +61,29 @@ export default class FetchQueueRepository extends BaseRepository<FetchQueue> {
       .doc(fetchQueue.id)
       .withConverter(this.converter(ConverterMode.UPDATE))
       .set(fetchQueue);
+  }
+
+  async findUnprocessedQueues(limit: number = 5): Promise<FetchQueue[]> {
+    const querySnapshot = await this.db
+      .collection(COLLECTION.FETCH_QUEUES)
+      .where('processed', '==', false)
+      .orderBy('createdAt', 'asc')
+      .limit(limit)
+      .withConverter(this.converter())
+      .get();
+
+    return querySnapshot.docs.map(doc => doc.data() as FetchQueue);
+  }
+
+  async findTopFetchQueuesByBoardId(boardId: string, limit: number = 5): Promise<FetchQueue[]> {
+    const querySnapshot = await this.db
+      .collection(COLLECTION.FETCH_QUEUES)
+      .where('boardId', '==', boardId)
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+      .withConverter(this.converter())
+      .get();
+
+    return querySnapshot.docs.map(doc => doc.data() as FetchQueue);
   }
 }
